@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import TitleBar from './TitleBar'
-import { formatDate } from '../utils/helpers'
 import FaCheck from 'react-icons/lib/fa/check'
 import { handleSavePollAnswer } from '../actions/shared'
-
+import { BrowserRouter as Router, Route, Switch,Redirect } from 'react-router-dom'
 class questionDetails extends Component {
     state = {
         selectedOption: ''
@@ -29,6 +28,11 @@ class questionDetails extends Component {
 
     render () {
         const { poll, authorAvatar, author, optionOne, optionTwo, answered, isOneAnswered, isTwoAnswered } = this.props
+        if (poll === null || poll == undefined ) {
+            return (
+                <Redirect to={`/404`}/>
+            )
+        }
         const {selectedOption} = this.state
         const optionOneVotes = poll.optionOne.votes.length
         const optionTwoVotes = poll.optionTwo.votes.length
@@ -113,19 +117,16 @@ class questionDetails extends Component {
 function mapStateToProps ({authedUser, questions, users}, props) {
     const { question_id } = props.match.params
     const poll = questions[question_id]
-    const authorAvatar = users[poll.author].avatarURL
-    const author = users[poll.author].id
-    // const timestamp = formatDate (poll.timestamp)
-    const optionOne = poll.optionOne.text
-    const optionTwo = poll.optionTwo.text
-    const isOneAnswered = poll.optionOne.votes.includes(authedUser)
-    const isTwoAnswered = poll.optionTwo.votes.includes(authedUser)
+    const authorAvatar = poll ? users[poll.author].avatarURL :''
+    const author = poll ? users[poll.author].id :''
+    const optionOne = poll ? poll.optionOne.text :''
+    const optionTwo =poll ? poll.optionTwo.text:''
+    const isOneAnswered =poll ? poll.optionOne.votes.includes(authedUser):''
+    const isTwoAnswered = poll ? poll.optionTwo.votes.includes(authedUser):''
     const answered = isOneAnswered || isTwoAnswered
-
     return {
         authorAvatar,
         author,
-        // timestamp,
         optionOne,
         optionTwo,
         answered,
@@ -137,6 +138,7 @@ function mapStateToProps ({authedUser, questions, users}, props) {
         authedUser,
         question_id,
     }
+    
 }
 
 function mapDispatchToProps (dispatch, props) {

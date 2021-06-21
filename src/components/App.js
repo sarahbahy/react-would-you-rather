@@ -15,14 +15,6 @@ class App extends Component {
     const AUTHED_ID = null;
     this.props.dispatch((handleInitialUsers(AUTHED_ID)))
   }
-  // function Greeting(props) {
-  //   const isLoggedIn = props.isLoggedIn;
-  //   if (isLoggedIn) {
-  //     return <UserGreeting />;
-  //   }
-  //   return <GuestGreeting />;
-  // }
-  // <Greeting isLoggedIn={false} />,
   render() {
     const { authedUser } = this.props
     return (
@@ -32,11 +24,11 @@ class App extends Component {
             
             <Switch>
             <Route path='/' exact component={ authedUser === null ? Login:Dashboard} />
-            {/* <Route   component={ Dashboard} /> */}
-            <Route path='/questions/:question_id' component={authedUser === null ? Login: questionDetails} />
+            <Route path='/questions/:question_id' exact component={authedUser === null ? Login: questionDetails} />
             <Route path='/add' exact component={authedUser === null ? Login:addquestion } />
             <Route path='/leaderboard' exact component={ authedUser === null ? Login:Leaderboard } />
-            <Route path='*' component={PageNotFound} />
+            <Route path='/404' component={PageNotFound} />
+            <Redirect from='*' to='/404' />
             </Switch>
             
         </Fragment>
