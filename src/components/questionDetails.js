@@ -115,7 +115,7 @@ function mapStateToProps ({authedUser, questions, users}, props) {
     const poll = questions[question_id]
     const authorAvatar = users[poll.author].avatarURL
     const author = users[poll.author].id
-    const timestamp = formatDate (poll.timestamp)
+    // const timestamp = formatDate (poll.timestamp)
     const optionOne = poll.optionOne.text
     const optionTwo = poll.optionTwo.text
     const isOneAnswered = poll.optionOne.votes.includes(authedUser)
@@ -125,7 +125,7 @@ function mapStateToProps ({authedUser, questions, users}, props) {
     return {
         authorAvatar,
         author,
-        timestamp,
+        // timestamp,
         optionOne,
         optionTwo,
         answered,
