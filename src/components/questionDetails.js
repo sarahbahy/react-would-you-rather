@@ -33,7 +33,6 @@ class questionDetails extends Component {
     }
     render () {
         const { poll, authorAvatar, author, optionOne, optionTwo, answered, isOneAnswered, isTwoAnswered } = this.props
-        console.log('render:',poll)
         if (poll === null || poll === undefined ) {
             return (
                 <div className='center'>
@@ -129,7 +128,6 @@ class questionDetails extends Component {
 function mapStateToProps ({authedUser, questions, users}, props) {
     const { question_id } = props.match.params
     const poll = questions[question_id]
-    console.log('moudt:',poll)
     const authorAvatar = poll ? users[poll.author].avatarURL :''
     const author = poll ? users[poll.author].id :''
     const optionOne = poll ? poll.optionOne.text :''
