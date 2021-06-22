@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import TitleBar from './TitleBar'
 import FaCheck from 'react-icons/lib/fa/check'
 import { handleSavePollAnswer } from '../actions/shared'
-import { BrowserRouter as Router, Route, Switch,Redirect } from 'react-router-dom'
+import { handleInitialquestions } from '../actions/shared'
+import { BrowserRouter as Redirect } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 class questionDetails extends Component {
     state = {
         selectedOption: ''
@@ -26,11 +28,21 @@ class questionDetails extends Component {
         savePollAnswer(answer)
     }
 
+    componentDidMount () {
+        this.props.dispatch(handleInitialquestions())
+    }
     render () {
         const { poll, authorAvatar, author, optionOne, optionTwo, answered, isOneAnswered, isTwoAnswered } = this.props
-        if (poll === null || poll == undefined ) {
+        console.log('render:',poll)
+        if (poll === null || poll === undefined ) {
             return (
-                <Redirect to={`/404`}/>
+                <div className='center'>
+                    <h1>Oops!</h1>
+                    <p>We can't seem to find the page you're looking for.</p>
+                    <p className='padding-top'>
+                        <NavLink className='click-here' to='/'>Click here</NavLink> to go back to home page
+                    </p>
+                </div>
             )
         }
         const {selectedOption} = this.state
@@ -117,6 +129,7 @@ class questionDetails extends Component {
 function mapStateToProps ({authedUser, questions, users}, props) {
     const { question_id } = props.match.params
     const poll = questions[question_id]
+    console.log('moudt:',poll)
     const authorAvatar = poll ? users[poll.author].avatarURL :''
     const author = poll ? users[poll.author].id :''
     const optionOne = poll ? poll.optionOne.text :''
@@ -146,7 +159,7 @@ function mapDispatchToProps (dispatch, props) {
     return {
         savePollAnswer : (answer) => {
             dispatch(handleSavePollAnswer(question_id, answer))
-        }
+        }, dispatch
     }
 }
 
